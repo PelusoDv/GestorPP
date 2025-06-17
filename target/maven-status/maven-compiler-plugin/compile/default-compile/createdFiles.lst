@@ -1,1 +1,3 @@
+com\incade\gestorpp\config\SecurityConfig.class
 com\incade\gestorpp\GestorPP.class
+com\incade\gestorpp\config\WebConfig.class

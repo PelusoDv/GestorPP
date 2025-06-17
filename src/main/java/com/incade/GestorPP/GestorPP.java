@@ -1,4 +1,4 @@
-package com.incade.GestorPP;
+package com.incade.gestorpp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

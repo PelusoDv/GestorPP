@@ -18,7 +18,15 @@ public class PresupuestoService {
     public Movimiento registrar(Movimiento m) {
         return repo.save(m);
     }
-
+    
+    public void borrar(int id) {
+        repo.deleteById(id);
+    }
+    
+    public boolean existe(int id) {
+        return repo.existsById(id);
+    }
+    
     public List<Movimiento> obtenerTodos() {
         return repo.findAll();
     }

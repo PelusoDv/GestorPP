@@ -4,6 +4,7 @@ package com.incade.GestorPP.Service;
 import com.incade.GestorPP.Entidad.Movimiento;
 import com.incade.GestorPP.Repositorio.MovimientoRepositorio;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +26,10 @@ public class PresupuestoService {
     
     public boolean existe(int id) {
         return repo.existsById(id);
+    }
+    
+    public Optional<Movimiento> getOne(int id) {
+        return repo.findById(id);
     }
     
     public List<Movimiento> obtenerTodos() {

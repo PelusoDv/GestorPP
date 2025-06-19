@@ -44,14 +44,14 @@ public class MovimientoControlador {
         return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
     }
     
-    @PutMapping("/{ids}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id,@Valid @RequestBody Movimiento m) {
         if(!service.existe(id))
             return new ResponseEntity(new String("El ID no existe"), HttpStatus.BAD_REQUEST);
         if(StringUtils.isBlank(m.getTipo()))
             return new ResponseEntity(new String("Seleccione un tipo"), HttpStatus.BAD_REQUEST);
         if(StringUtils.isBlank(m.getCategoria()))
-            return new ResponseEntity(new String("Seleccione una categoria"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new String("Seleccione una categoría"), HttpStatus.BAD_REQUEST);
         if(StringUtils.isBlank(String.valueOf(m.getMonto())))
             return new ResponseEntity(new String("El monto no debe estar vacio"), HttpStatus.BAD_REQUEST);
         

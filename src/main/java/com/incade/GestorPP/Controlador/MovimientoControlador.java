@@ -1,6 +1,8 @@
 
 package com.incade.GestorPP.Controlador;
 
+import com.incade.GestorPP.Entidad.Gasto;
+import com.incade.GestorPP.Entidad.Ingreso;
 import com.incade.GestorPP.Entidad.Movimiento;
 import com.incade.GestorPP.Service.PresupuestoService;
 import java.util.List;
@@ -31,39 +33,56 @@ public class MovimientoControlador {
 
     @PostMapping
     public ResponseEntity<Movimiento> crearMovimiento(@Valid @RequestBody Movimiento m) {
-        service.registrar(m);
-        return new ResponseEntity(new String("Movimiento guardado"), HttpStatus.OK);
+        try {
+            service.registrar(m);
+            return new ResponseEntity(new String("Movimiento guardado"), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }       
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Movimiento> delete(@PathVariable("id") int id){
-        if(!service.existe(id))
-            return new ResponseEntity(new String("El ID no existe"), HttpStatus.BAD_REQUEST);
-        
-        service.borrar(id);
-        return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
+        try {
+            service.borrar(id);
+            return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        } 
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id,@Valid @RequestBody Movimiento m) {
-        if(!service.existe(id))
-            return new ResponseEntity(new String("El ID no existe"), HttpStatus.BAD_REQUEST);
-        if(StringUtils.isBlank(m.getTipo()))
-            return new ResponseEntity(new String("Seleccione un tipo"), HttpStatus.BAD_REQUEST);
-        if(StringUtils.isBlank(m.getCategoria()))
-            return new ResponseEntity(new String("Seleccione una categoría"), HttpStatus.BAD_REQUEST);
-        if(StringUtils.isBlank(String.valueOf(m.getMonto())))
-            return new ResponseEntity(new String("El monto no debe estar vacio"), HttpStatus.BAD_REQUEST);
-        
-        Movimiento mov = service.getOne(id).get();
-        mov = m;
-        service.registrar(mov);
-        return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
+        try {
+            Movimiento mov = service.getOne(id).get();
+            mov = m;
+            service.registrar(mov);
+            return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
+        } catch (Exception e) {
+            if(!service.existe(id))
+                return new ResponseEntity(new String("El id " +id+ " no existe."), HttpStatus.NOT_FOUND);
+            else if(StringUtils.isBlank(m.getCategotia()))
+                return new ResponseEntity(new String("Seleccione una categoría"), HttpStatus.BAD_REQUEST);
+            else if(StringUtils.isBlank(String.valueOf(m.getMonto())))
+                return new ResponseEntity(new String("El monto no debe estar vacio"), HttpStatus.BAD_REQUEST);
+            else
+                return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping
-    public List<Movimiento> listar() {
+    @GetMapping("/todos")
+    public List<Movimiento> listarTodo() {
         return service.obtenerTodos();
+    }
+    
+    @GetMapping("/ingresos")
+    public List<Ingreso> listarIngresos() {
+        return service.obtenerIngresos();
+    }    
+    
+    @GetMapping("/gastos")
+    public List<Gasto> listarGastos() {
+        return service.obtenerGastos();
     }
 
     @GetMapping("/balance")

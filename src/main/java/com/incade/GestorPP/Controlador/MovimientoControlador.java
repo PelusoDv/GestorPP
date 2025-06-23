@@ -7,7 +7,6 @@ import com.incade.GestorPP.Entidad.Movimiento;
 import com.incade.GestorPP.Service.PresupuestoService;
 import java.util.List;
 import javax.validation.Valid;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,11 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/movimientos")
-@CrossOrigin (origins = {"http://localhost:3306", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class MovimientoControlador {
 
     private final PresupuestoService service;
@@ -32,17 +32,19 @@ public class MovimientoControlador {
     }
 
     @PostMapping
-    public ResponseEntity<Movimiento> crearMovimiento(@Valid @RequestBody Movimiento m) {
+    public ResponseEntity<?> crearMovimiento(@RequestParam int id, @Valid @RequestBody Movimiento m) {
         try {
-            service.registrar(m);
+            service.registrar(m,id);
             return new ResponseEntity(new String("Movimiento guardado"), HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }       
+        } catch (RuntimeException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Movimiento> delete(@PathVariable("id") int id){
+    public ResponseEntity<?> delete(@PathVariable("id") int id){
         try {
             service.borrar(id);
             return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
@@ -52,19 +54,17 @@ public class MovimientoControlador {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") int id,@Valid @RequestBody Movimiento m) {
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestParam int catId, @Valid @RequestBody Movimiento m) {
         try {
-            Movimiento mov = service.getOne(id).get();
-            mov = m;
-            service.registrar(mov);
+            Movimiento mov = service.getOne(id).orElseThrow(() -> new RuntimeException("No encontrado"));;
+            mov.setMonto(m.getMonto());
+            mov.setDescripcion(m.getDescripcion());
+            mov.setFecha(m.getFecha());
+            service.registrar(mov, catId);
             return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
         } catch (Exception e) {
             if(!service.existe(id))
                 return new ResponseEntity(new String("El id " +id+ " no existe."), HttpStatus.NOT_FOUND);
-            else if(StringUtils.isBlank(m.getCategotia()))
-                return new ResponseEntity(new String("Seleccione una categoría"), HttpStatus.BAD_REQUEST);
-            else if(StringUtils.isBlank(String.valueOf(m.getMonto())))
-                return new ResponseEntity(new String("El monto no debe estar vacio"), HttpStatus.BAD_REQUEST);
             else
                 return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

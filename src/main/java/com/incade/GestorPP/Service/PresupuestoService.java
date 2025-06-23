@@ -1,9 +1,13 @@
 
 package com.incade.GestorPP.Service;
 
+import com.incade.GestorPP.Entidad.CategoriaGasto;
+import com.incade.GestorPP.Entidad.CategoriaIngreso;
 import com.incade.GestorPP.Entidad.Gasto;
 import com.incade.GestorPP.Entidad.Ingreso;
 import com.incade.GestorPP.Entidad.Movimiento;
+import com.incade.GestorPP.Repositorio.CategoriaGastoRepositorio;
+import com.incade.GestorPP.Repositorio.CategoriaIngresoRepositorio;
 import com.incade.GestorPP.Repositorio.GastoRepositorio;
 import com.incade.GestorPP.Repositorio.IngresoRepositorio;
 import java.util.List;
@@ -21,13 +25,29 @@ public class PresupuestoService {
     IngresoRepositorio repoI;
     @Autowired
     GastoRepositorio repoG;
+    @Autowired
+    CategoriaGastoRepositorio repoCatG;
+    @Autowired
+    CategoriaIngresoRepositorio repoCatI;
 
-    public Movimiento registrar(Movimiento m) {
+    public Movimiento registrar(Movimiento m, int categoriaId) {
         if (m.getMonto() < 0) {
-            Gasto gas = new Gasto(m.getMonto(),m.getCategotia(),m.getDescripcion(),m.getFecha());
+            Gasto gas = new Gasto();
+            CategoriaGasto categoria = repoCatG.findById(categoriaId)
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            gas.setMonto(m.getMonto());
+            gas.setDescripcion(m.getDescripcion());
+            gas.setFecha(m.getFecha());
+            gas.setCategoria(categoria);
             return repoG.save(gas);
         } else if (m.getMonto() > 0) {
-            Ingreso ing = new Ingreso(m.getMonto(),m.getCategotia(),m.getDescripcion(),m.getFecha());
+            Ingreso ing = new Ingreso();
+            CategoriaIngreso categoria = repoCatI.findById(categoriaId)
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            ing.setMonto(m.getMonto());
+            ing.setDescripcion(m.getDescripcion());
+            ing.setFecha(m.getFecha());
+            ing.setCategoria(categoria);
             return repoI.save(ing);
         } else {
             throw new IllegalArgumentException("El valor " +m.getMonto()+ " no es un monto valido.");
@@ -46,9 +66,9 @@ public class PresupuestoService {
     
     public List<?> listarCategorias(String tipo) {
         if (tipo.equalsIgnoreCase("Ingreso")){
-            return repoI.findDistinctCategoria();
+            return repoCatI.findAll();
         } else if (tipo.equalsIgnoreCase("Gasto")){
-            return repoG.findDistinctCategoria();
+            return repoCatG.findAll();
         } else {
             throw new IllegalArgumentException("El tipo " +tipo+ " es incorrecto.");
         }
@@ -57,7 +77,7 @@ public class PresupuestoService {
     public boolean existe(int id) {
         return repoI.existsById(id) || repoG.existsById(id);
     }
-    
+       
     public Optional<Movimiento> getOne(int id) {
         Optional<? extends Movimiento> ing = repoI.findById(id);
         Optional<? extends Movimiento> gas = repoG.findById(id);

@@ -31,15 +31,23 @@ public class MovimientoControlador {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<?> crearMovimiento(@RequestParam int id, @Valid @RequestBody Movimiento m) {
+    @PostMapping("/guardarI")
+    public ResponseEntity<?> crearIngreso(@RequestParam int catId, @Valid @RequestBody Ingreso ingreso) {
         try {
-            service.registrar(m,id);
-            return new ResponseEntity(new String("Movimiento guardado"), HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (RuntimeException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            service.registrarI(ingreso, catId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Ingreso guardado");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/guardarG")
+    public ResponseEntity<?> crearGasto(@RequestParam int catId, @Valid @RequestBody Gasto gasto) {
+        try {
+            service.registrarG(gasto, catId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Gasto guardado");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     
@@ -55,19 +63,32 @@ public class MovimientoControlador {
     
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id, @RequestParam int catId, @Valid @RequestBody Movimiento m) {
-        try {
-            Movimiento mov = service.getOne(id).orElseThrow(() -> new RuntimeException("No encontrado"));;
-            mov.setMonto(m.getMonto());
-            mov.setDescripcion(m.getDescripcion());
-            mov.setFecha(m.getFecha());
-            service.registrar(mov, catId);
-            return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
+        try {      
+            if (m.getMonto() > 0){
+                service.getOne(id).orElseThrow(() -> new RuntimeException("Ingreso no encontrado"));
+                Ingreso ing = new Ingreso();
+                ing.setId(id);
+                ing.setMonto(m.getMonto()); 
+                ing.setDescripcion(m.getDescripcion());
+                ing.setFecha(m.getFecha());
+                service.registrarI(ing, catId);
+                return new ResponseEntity(new String("Ingreso actualizado"), HttpStatus.OK);
+            } else if (m.getMonto() < 0) {
+                service.getOne(id).orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
+                Gasto gas = new Gasto();
+                gas.setId(id);
+                gas.setMonto(-(m.getMonto()));
+                gas.setDescripcion(m.getDescripcion());
+                gas.setFecha(m.getFecha());
+                service.registrarG(gas, catId);
+                return new ResponseEntity(new String("Gasto actualizado"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity("Error inesperado", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
-            if(!service.existe(id))
-                return new ResponseEntity(new String("El id " +id+ " no existe."), HttpStatus.NOT_FOUND);
-            else
-                return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }   
+              
     }
 
     @GetMapping

@@ -30,37 +30,34 @@ public class PresupuestoService {
     @Autowired
     CategoriaIngresoRepositorio repoCatI;
 
-    public Movimiento registrar(Movimiento m, int categoriaId) {
-        // Primero verificamos si el monto es menor a 0 (para gastos)
-        if (m.getMonto() < 0) {
-            // Crea un nuevo Gasto
-            Gasto gas = new Gasto();
-            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
-            CategoriaGasto categoria = repoCatG.findById(categoriaId)
-                    // Al ser Optional, si no encuentra devuelve una excepcion
-                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-            // Settea los parametros del Gasto
-            gas.setMonto(m.getMonto());
-            gas.setDescripcion(m.getDescripcion());
-            gas.setFecha(m.getFecha());
-            gas.setCategoria(categoria);
-            return repoG.save(gas); // Guarda el Gasto
-        // O mayor a 0 (para ingresos)
-        } else if (m.getMonto() > 0) {
-            Ingreso ing = new Ingreso();
-            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
-            CategoriaIngreso categoria = repoCatI.findById(categoriaId)
-                    // Al ser Optional, si no encuentra devuelve una excepcion
-                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-            ing.setMonto(m.getMonto());
-            ing.setDescripcion(m.getDescripcion());
-            ing.setFecha(m.getFecha());
-            ing.setCategoria(categoria);
-            return repoI.save(ing); // Guarda el Ingreso
-        } else {
-            // Si se intenta guardar un Movimiento con monto 0, devuelve una excepcion
-            throw new IllegalArgumentException("El valor " +m.getMonto()+ " no es un monto valido.");
-        }
+    public Gasto registrarG(Gasto g, int categoriaId) {
+        // Crea un nuevo Gasto
+        Gasto gas = new Gasto();
+        // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
+        CategoriaGasto categoria = repoCatG.findById(categoriaId)
+                // Al ser Optional, si no encuentra devuelve una excepcion
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        // Settea los parametros del Gasto
+        gas.setMonto(g.getMonto());
+        gas.setDescripcion(g.getDescripcion());
+        gas.setFecha(g.getFecha());
+        gas.setCategoria(categoria);
+        return repoG.save(gas); // Guarda el Gasto
+    }   
+        
+    public Ingreso registrarI(Ingreso i, int categoriaId) {
+        // Crea un nuevo Gasto
+        Ingreso ing = new Ingreso();
+        // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
+        CategoriaIngreso categoria = repoCatI.findById(categoriaId)
+                // Al ser Optional, si no encuentra devuelve una excepcion
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        // Settea los parametros del Gasto
+        ing.setMonto(i.getMonto());
+        ing.setDescripcion(i.getDescripcion());
+        ing.setFecha(i.getFecha());
+        ing.setCategoria(categoria);
+        return repoI.save(ing); // Guarda el Gasto
     }
     
     public void borrar(int id) {
@@ -98,6 +95,7 @@ public class PresupuestoService {
         if (ing.isPresent()){ // Si esta presente en el repo Ingreso
             return Optional.of(ing.get()); // Devuelve ing como Optional<Movimiento> nuevamente
         } else if (gas.isPresent()) { // Si esta presente en el repo Gasto
+            gas.get().setMonto(-(gas.get().getMonto()));
             return Optional.of(gas.get()); // dDvuelve gas como Optional<Movimiento> nuevamente
         } else { // Si no existe devuelve una Exception
             throw new NullPointerException("El id " +id+ " no existe.");    
@@ -132,6 +130,6 @@ public class PresupuestoService {
                 .stream() //Pasa la info a un stream
                 .mapToDouble(Gasto::getMonto).sum(); //Mapea los montos en tipo double y los suma
         
-        return totalIngresos + totalGastos; //Como Gastos guarda en nº negativo sumamos ambos
+        return totalIngresos - totalGastos;
     }
 }

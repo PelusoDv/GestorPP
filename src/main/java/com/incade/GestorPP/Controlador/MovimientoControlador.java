@@ -70,6 +70,11 @@ public class MovimientoControlador {
         }
     }
 
+    @GetMapping
+    public List<?> categorias(String tipo) {
+        return service.listarCategorias(tipo);
+    }
+    
     @GetMapping("/todos")
     public List<Movimiento> listarTodo() {
         return service.obtenerTodos();

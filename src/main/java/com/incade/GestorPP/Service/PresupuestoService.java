@@ -31,33 +31,41 @@ public class PresupuestoService {
     CategoriaIngresoRepositorio repoCatI;
 
     public Gasto registrarG(Gasto g, int categoriaId) {
-        // Crea un nuevo Gasto
-        Gasto gas = new Gasto();
-        // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
-        CategoriaGasto categoria = repoCatG.findById(categoriaId)
+        if (g.getMonto() < 0) {
+            // Crea un nuevo Gasto
+            Gasto gas = new Gasto();
+            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
+            CategoriaGasto categoria = repoCatG.findById(categoriaId)
                 // Al ser Optional, si no encuentra devuelve una excepcion
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        // Settea los parametros del Gasto
-        gas.setMonto(g.getMonto());
-        gas.setDescripcion(g.getDescripcion());
-        gas.setFecha(g.getFecha());
-        gas.setCategoria(categoria);
-        return repoG.save(gas); // Guarda el Gasto
+            // Settea los parametros del Gasto
+            gas.setMonto(g.getMonto());
+            gas.setDescripcion(g.getDescripcion());
+            gas.setFecha(g.getFecha());
+            gas.setCategoria(categoria);
+            return repoG.save(gas); // Guarda el Gasto
+        } else {
+            throw new IllegalArgumentException("El valor " +g.getMonto()+ " no es un monto valido.");
+        }
     }   
         
     public Ingreso registrarI(Ingreso i, int categoriaId) {
-        // Crea un nuevo Gasto
-        Ingreso ing = new Ingreso();
-        // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
-        CategoriaIngreso categoria = repoCatI.findById(categoriaId)
+        if (i.getMonto() > 0) {
+            // Crea un nuevo Gasto
+            Ingreso ing = new Ingreso();
+            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
+            CategoriaIngreso categoria = repoCatI.findById(categoriaId)
                 // Al ser Optional, si no encuentra devuelve una excepcion
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        // Settea los parametros del Gasto
-        ing.setMonto(i.getMonto());
-        ing.setDescripcion(i.getDescripcion());
-        ing.setFecha(i.getFecha());
-        ing.setCategoria(categoria);
-        return repoI.save(ing); // Guarda el Gasto
+            // Settea los parametros del Gasto
+            ing.setMonto(i.getMonto());
+            ing.setDescripcion(i.getDescripcion());
+            ing.setFecha(i.getFecha());
+            ing.setCategoria(categoria);
+            return repoI.save(ing); // Guarda el Gasto
+        } else {
+            throw new IllegalArgumentException("El valor " +i.getMonto()+ " no es un monto valido.");
+        }
     }
     
     public void borrar(int id) {
@@ -95,10 +103,10 @@ public class PresupuestoService {
         if (ing.isPresent()){ // Si esta presente en el repo Ingreso
             return Optional.of(ing.get()); // Devuelve ing como Optional<Movimiento> nuevamente
         } else if (gas.isPresent()) { // Si esta presente en el repo Gasto
-            gas.get().setMonto(-(gas.get().getMonto()));
+            gas.get().setMonto(gas.get().getMonto());
             return Optional.of(gas.get()); // dDvuelve gas como Optional<Movimiento> nuevamente
         } else { // Si no existe devuelve una Exception
-            throw new NullPointerException("El id " +id+ " no existe.");    
+            throw new NullPointerException("El Movimiento no existe.");    
         }
     }
     
@@ -130,6 +138,6 @@ public class PresupuestoService {
                 .stream() //Pasa la info a un stream
                 .mapToDouble(Gasto::getMonto).sum(); //Mapea los montos en tipo double y los suma
         
-        return totalIngresos - totalGastos;
+        return totalIngresos + totalGastos; //Como Gastos guarda en nº negativo sumamos ambos
     }
 }

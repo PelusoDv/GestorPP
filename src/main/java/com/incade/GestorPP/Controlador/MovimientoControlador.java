@@ -35,9 +35,9 @@ public class MovimientoControlador {
     public ResponseEntity<?> crearIngreso(@RequestParam int catId, @Valid @RequestBody Ingreso ingreso) {
         try {
             service.registrarI(ingreso, catId);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Ingreso guardado");
+            return new ResponseEntity("Ingreso guardado", HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -45,9 +45,9 @@ public class MovimientoControlador {
     public ResponseEntity<?> crearGasto(@RequestParam int catId, @Valid @RequestBody Gasto gasto) {
         try {
             service.registrarG(gasto, catId);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Gasto guardado");
+            return new ResponseEntity ("Gasto guardado", HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
     
@@ -73,25 +73,23 @@ public class MovimientoControlador {
                 ing.setFecha(m.getFecha());
                 service.registrarI(ing, catId);
                 return new ResponseEntity(new String("Ingreso actualizado"), HttpStatus.OK);
-            } else if (m.getMonto() < 0) {
+            } else {
                 service.getOne(id).orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
                 Gasto gas = new Gasto();
                 gas.setId(id);
-                gas.setMonto(-(m.getMonto()));
+                gas.setMonto(m.getMonto());
                 gas.setDescripcion(m.getDescripcion());
                 gas.setFecha(m.getFecha());
                 service.registrarG(gas, catId);
                 return new ResponseEntity(new String("Gasto actualizado"), HttpStatus.OK);
-            } else {
-                return new ResponseEntity("Error inesperado", HttpStatus.BAD_REQUEST);
             }
-        } catch (Exception e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }   
               
     }
 
-    @GetMapping
+    @GetMapping("/categorias")
     public List<?> categorias(String tipo) {
         return service.listarCategorias(tipo);
     }

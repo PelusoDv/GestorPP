@@ -82,6 +82,7 @@ public class PresupuestoService {
             g.setMonto(dto.getMonto());
             g.setDescripcion(dto.getDescripcion());
             g.setFecha(dto.getFecha());
+            g.setCategoria(categoria);
             // Guarda el Gasto
             return repoG.save(g);
         //Si el monto es mayor a 0

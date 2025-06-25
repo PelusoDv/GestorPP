@@ -1,6 +1,7 @@
 
 package com.incade.GestorPP.Service;
 
+import com.incade.GestorPP.Dto.MovimientoDTO;
 import com.incade.GestorPP.Entidad.CategoriaGasto;
 import com.incade.GestorPP.Entidad.CategoriaIngreso;
 import com.incade.GestorPP.Entidad.Gasto;
@@ -30,7 +31,7 @@ public class PresupuestoService {
     @Autowired
     CategoriaIngresoRepositorio repoCatI;
 
-    public Gasto registrarG(Gasto g, int categoriaId) {
+    /*public Gasto registrarG(Gasto g, int categoriaId) {
         if (g.getMonto() < 0) {
             // Crea un nuevo Gasto
             Gasto gas = new Gasto();
@@ -66,6 +67,68 @@ public class PresupuestoService {
         } else {
             throw new IllegalArgumentException("El valor " +i.getMonto()+ " no es un monto valido.");
         }
+    }*/
+    
+    public Movimiento registrar(MovimientoDTO dto) {
+        //Si el monto es menor a 0
+        if (dto.getMonto() < 0) {
+            // Crea un nuevo Gasto
+            Gasto g = new Gasto();
+            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
+            CategoriaGasto categoria = repoCatG.findById(dto.getCategoriaId())
+                // Al ser Optional el findById, si no encuentra tiene que devolver una excepcion
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            // Settea los parametros del Gasto
+            g.setMonto(dto.getMonto());
+            g.setDescripcion(dto.getDescripcion());
+            g.setFecha(dto.getFecha());
+            // Guarda el Gasto
+            return repoG.save(g);
+        //Si el monto es mayor a 0
+        } else if (dto.getMonto() > 0) {
+            // Crea un nuevo Ingreso
+            Ingreso i = new Ingreso();
+            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
+            CategoriaIngreso categoria = repoCatI.findById(dto.getCategoriaId())
+                // Al ser Optional el findById, si no encuentra tiene que devolver una excepcion
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+            // Settea los parametros del Ingreso
+            i.setMonto(dto.getMonto());
+            i.setDescripcion(dto.getDescripcion());
+            i.setFecha(dto.getFecha());
+            i.setCategoria(categoria);
+            // Guarda el Ingreso
+            return repoI.save(i);
+        } else {
+            throw new IllegalArgumentException("El monto no puede ser cero");
+        }
+    }  
+    
+    public Movimiento actualizar(MovimientoDTO dto, int id) {
+        if (dto.getMonto() > 0) {
+            Ingreso i = repoI.findById(id)
+                .orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
+            CategoriaIngreso categoria = repoCatI.findById(dto.getCategoriaId())
+                .orElseThrow(() -> new RuntimeException("Categoría de gasto no encontrada"));
+            i.setMonto(dto.getMonto());
+            i.setDescripcion(dto.getDescripcion());
+            i.setFecha(dto.getFecha());
+            i.setCategoria(categoria);
+            return repoI.save(i);
+        } else if (dto.getMonto() < 0){
+            Gasto g = repoG.findById(id)
+                .orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
+            CategoriaGasto categoria = repoCatG.findById(dto.getCategoriaId())
+                .orElseThrow(() -> new RuntimeException("Categoría de gasto no encontrada"));
+            g.setMonto(dto.getMonto());
+            g.setDescripcion(dto.getDescripcion());
+            g.setFecha(dto.getFecha());
+            g.setCategoria(categoria);
+            return repoG.save(g);
+        } else {
+            throw new IllegalArgumentException("El monto no puede ser cero");
+        }
+        
     }
     
     public void borrar(int id) {

@@ -30,9 +30,9 @@ public class MovimientoControlador {
     }
   
     @PostMapping("/registrar")
-    public ResponseEntity<?> crearMovimiento(@RequestBody @Valid MovimientoDTO dto) {
+    public ResponseEntity<?> crearMovi(@RequestBody @Valid MovimientoDTO dto) {
         try {
-            Movimiento mov = service.registrar(dto);
+            service.registrar(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Movimiento registrado");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -40,7 +40,7 @@ public class MovimientoControlador {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") int id){
+    public ResponseEntity<?> borrarMovi(@PathVariable("id") int id){
         try {
             service.borrar(id);
             return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
@@ -50,11 +50,10 @@ public class MovimientoControlador {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") int id, @Valid @RequestBody MovimientoDTO dto) {
+    public ResponseEntity<?> actualizarMovi(@PathVariable("id") int id, @Valid @RequestBody MovimientoDTO dto) {
         try {      
-            service.getOne(id).orElseThrow(() -> new RuntimeException("Ingreso no encontrado"));
-            Movimiento mov = service.actualizar(dto, id);
-            return new ResponseEntity(new String("Ingreso actualizado"), HttpStatus.OK);
+            service.actualizar(dto, id);
+            return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }          

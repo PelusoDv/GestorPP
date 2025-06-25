@@ -12,7 +12,6 @@ import com.incade.GestorPP.Repositorio.CategoriaIngresoRepositorio;
 import com.incade.GestorPP.Repositorio.GastoRepositorio;
 import com.incade.GestorPP.Repositorio.IngresoRepositorio;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.transaction.Transactional;
@@ -70,7 +69,7 @@ public class PresupuestoService {
     public Movimiento actualizar(MovimientoDTO dto, int id) {
         if (dto.getMonto() > 0) {
             Ingreso i = repoI.findById(id)
-                .orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Ingreso no encontrado"));
             CategoriaIngreso categoria = repoCatI.findById(dto.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoría de gasto no encontrada"));
             i.setMonto(dto.getMonto());
@@ -90,8 +89,7 @@ public class PresupuestoService {
             return repoG.save(g);
         } else {
             throw new IllegalArgumentException("El monto no puede ser cero");
-        }
-        
+        }   
     }
     
     public void borrar(int id) {
@@ -100,7 +98,7 @@ public class PresupuestoService {
         } else if (repoG.existsById(id)){
             repoG.deleteById(id); 
         } else {
-            throw new IllegalArgumentException("El id " +id+ " no existe.");
+            throw new IllegalArgumentException("El Movimiento no existe.");
         }
     }
     
@@ -111,29 +109,18 @@ public class PresupuestoService {
         } else if (tipo.equalsIgnoreCase("Gasto")){
             return repoCatG.findAll();
         } else { // Si la categoria no es valida, devuelve una excepcion
-            throw new IllegalArgumentException("El tipo " +tipo+ " es incorrecto.");
+            throw new IllegalArgumentException("Tipo de Movimiento incorrecto.");
         }
+    }
+          
+    public List<Ingreso> obtenerIngresos() {
+        List<Ingreso> ingresos = repoI.findAll();
+        return ingresos;
     }
     
-    public boolean existe(int id) {
-        // Busca si el id existe en como Ingreso o como Gasto
-        return repoI.existsById(id) || repoG.existsById(id);
-    }
-       
-    public Optional<Movimiento> getOne(int id) {
-        // Como Ingreso y Gasto heredan de Movimiento, 
-        // Buscamos por id y traemos como objeto Movimiento de cada repositorio
-        Optional<? extends Movimiento> ing = repoI.findById(id); 
-        Optional<? extends Movimiento> gas = repoG.findById(id); 
-      
-        if (ing.isPresent()){ // Si esta presente en el repo Ingreso
-            return Optional.of(ing.get()); // Devuelve ing como Optional<Movimiento> nuevamente
-        } else if (gas.isPresent()) { // Si esta presente en el repo Gasto
-            gas.get().setMonto(gas.get().getMonto());
-            return Optional.of(gas.get()); // dDvuelve gas como Optional<Movimiento> nuevamente
-        } else { // Si no existe devuelve una Exception
-            throw new NullPointerException("El Movimiento no existe.");    
-        }
+    public List<Gasto> obtenerGastos() {
+        List<Gasto> gastos = repoG.findAll();
+        return gastos;
     }
     
     public List<Movimiento> obtenerTodos() {
@@ -145,25 +132,13 @@ public class PresupuestoService {
         return movimientos; // Devuelve la lista con todos los movimientos
     }
     
-    public List<Ingreso> obtenerIngresos() {
-        List<Ingreso> ingresos = repoI.findAll();
-        return ingresos;
-    }
-    
-    public List<Gasto> obtenerGastos() {
-        List<Gasto> gastos = repoG.findAll();
-        return gastos;
-    }
-
-    public double calcularBalance() {
+    public double calcularBalance() { 
         double totalIngresos = repoI.findAll() //Trae todos los Ingresos
                 .stream() //Pasa la info a un stream
-                .mapToDouble(Ingreso::getMonto).sum(); //Mapea los montos en tipo double y los suma
-        
+                .mapToDouble(Ingreso::getMonto).sum(); //Mapea los montos en tipo double y los suma 
         double totalGastos = repoG.findAll() //Trae todos los Gastos
                 .stream() //Pasa la info a un stream
                 .mapToDouble(Gasto::getMonto).sum(); //Mapea los montos en tipo double y los suma
-        
         return totalIngresos + totalGastos; //Como Gastos guarda en nº negativo sumamos ambos
     }
 }

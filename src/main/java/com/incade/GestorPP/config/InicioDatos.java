@@ -19,14 +19,19 @@ public class InicioDatos implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (repoCatG.count() == 0) {
-            List<String> categoriasGasto = List.of("Comida", "Transporte", "Servicio", "Otro");
+            List<String> categoriasGasto = List.of("Otros Gastos","Ahorros","Alimentación",
+                                                   "Alquiler","Cuidado Personal","Deudas",
+                                                   "Entretenimiento/Ocio","Educacion","Inversiones",
+                                                   "Ropa","Salud","Servicio", "Vivienda");
             categoriasGasto.forEach(nombre ->
                 repoCatG.save(new CategoriaGasto(null, nombre))
             );
         }
 
         if (repoCatI.count() == 0) {
-            List<String> categoriasIngreso = List.of("Salario", "Premio", "Venta", "Otro");
+            List<String> categoriasIngreso = List.of("Otros Ingresos", "Inversiones", "Extras",
+                                                     "Prestamos", "Reembolsos","Regalos/Donaciones",
+                                                     "Salarios","Subsidios/Becas", "Ventas");
             categoriasIngreso.forEach(nombre ->
                 repoCatI.save(new CategoriaIngreso(null, nombre))
             );

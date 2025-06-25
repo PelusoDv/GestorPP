@@ -30,45 +30,7 @@ public class PresupuestoService {
     CategoriaGastoRepositorio repoCatG;
     @Autowired
     CategoriaIngresoRepositorio repoCatI;
-
-    /*public Gasto registrarG(Gasto g, int categoriaId) {
-        if (g.getMonto() < 0) {
-            // Crea un nuevo Gasto
-            Gasto gas = new Gasto();
-            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
-            CategoriaGasto categoria = repoCatG.findById(categoriaId)
-                // Al ser Optional, si no encuentra devuelve una excepcion
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-            // Settea los parametros del Gasto
-            gas.setMonto(g.getMonto());
-            gas.setDescripcion(g.getDescripcion());
-            gas.setFecha(g.getFecha());
-            gas.setCategoria(categoria);
-            return repoG.save(gas); // Guarda el Gasto
-        } else {
-            throw new IllegalArgumentException("El valor " +g.getMonto()+ " no es un monto valido.");
-        }
-    }   
-        
-    public Ingreso registrarI(Ingreso i, int categoriaId) {
-        if (i.getMonto() > 0) {
-            // Crea un nuevo Gasto
-            Ingreso ing = new Ingreso();
-            // El usuario elige una categoria de la lista y con el id se busca si existe la misma en el repo
-            CategoriaIngreso categoria = repoCatI.findById(categoriaId)
-                // Al ser Optional, si no encuentra devuelve una excepcion
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-            // Settea los parametros del Gasto
-            ing.setMonto(i.getMonto());
-            ing.setDescripcion(i.getDescripcion());
-            ing.setFecha(i.getFecha());
-            ing.setCategoria(categoria);
-            return repoI.save(ing); // Guarda el Gasto
-        } else {
-            throw new IllegalArgumentException("El valor " +i.getMonto()+ " no es un monto valido.");
-        }
-    }*/
-    
+   
     public Movimiento registrar(MovimientoDTO dto) {
         //Si el monto es menor a 0
         if (dto.getMonto() < 0) {

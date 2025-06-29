@@ -14,6 +14,6 @@ public interface CategoriaRepositorio extends JpaRepository<Categoria, Integer> 
     @Query("SELECT DISTINCT tipo FROM Categoria")
     List<String> findDistinctTipos();
     public boolean existsByTipo(String tipo);
-    @Query("SELECT categoria FROM  WHERE tipo IN :tipo")
+    @Query("SELECT categoria FROM Categoria WHERE tipo IN :tipo")
     List<String> findCategoriasByTipo(@Param("tipo") String tipo);
 }

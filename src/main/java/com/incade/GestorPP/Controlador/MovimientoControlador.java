@@ -2,8 +2,6 @@
 package com.incade.GestorPP.Controlador;
 
 import com.incade.GestorPP.Dto.MovimientoDTO;
-import com.incade.GestorPP.Entidad.Gasto;
-import com.incade.GestorPP.Entidad.Ingreso;
 import com.incade.GestorPP.Entidad.Movimiento;
 import com.incade.GestorPP.Service.PresupuestoService;
 import java.util.List;
@@ -69,7 +67,7 @@ public class MovimientoControlador {
         return service.listarCategorias(tipo);
     }
     
-    @GetMapping("/categorias")
+    @GetMapping("/divisas")
     public List<String> divisas() {
         return service.listarDivisa();
     }

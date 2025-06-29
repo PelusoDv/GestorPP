@@ -23,6 +23,6 @@ public class Categoria {
     @NotBlank
     private String tipo;
     @NotBlank
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String categoria;
 }

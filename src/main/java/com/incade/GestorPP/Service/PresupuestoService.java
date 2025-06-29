@@ -22,7 +22,6 @@ public class PresupuestoService {
     CategoriaRepositorio repoC;
     @Autowired
     DivisaRepositorio repoD;
-    List<String> tipos = repoC.findDistinctTipos();
    
     public Movimiento registrar(MovimientoDTO dto) {
 
@@ -102,6 +101,7 @@ public class PresupuestoService {
     }
     
     public List<String> listarTipo() {
+       List<String> tipos = repoC.findDistinctTipos();
        return tipos;
    }
     
@@ -121,12 +121,14 @@ public class PresupuestoService {
     }
     
     public List<Movimiento> obtenerGastos() {
-        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(0));
+        List<String> tipos = repoC.findDistinctTipos();
+        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(1));
         return gastos;
     }
     
     public List<Movimiento> obtenerIngresos() {  
-        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(1));
+        List<String> tipos = repoC.findDistinctTipos();
+        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(2));
         return ingresos;
     }
     

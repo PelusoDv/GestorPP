@@ -10,5 +10,7 @@ public class MovimientoDTO {
     private double monto;
     private String descripcion;
     private LocalDate fecha;
-    private int categoriaId;
+    private String tipo;
+    private String categoria;
+    private String divisa;
 }

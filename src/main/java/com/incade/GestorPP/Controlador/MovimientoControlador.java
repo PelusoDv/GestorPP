@@ -39,6 +39,16 @@ public class MovimientoControlador {
         }
     }
     
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarMovi(@Valid @RequestBody MovimientoDTO dto, @PathVariable("id") int id) {
+        try {      
+            service.actualizar(dto, id);
+            return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }          
+    }    
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> borrarMovi(@PathVariable("id") int id){
         try {
@@ -48,20 +58,20 @@ public class MovimientoControlador {
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         } 
     }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarMovi(@PathVariable("id") int id, @Valid @RequestBody MovimientoDTO dto) {
-        try {      
-            service.actualizar(dto, id);
-            return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }          
-    }
 
+    @GetMapping("/tipos")
+    public List<String> tipos() {
+        return service.listarTipo();
+    }
+    
     @GetMapping("/categorias")
-    public List<?> categorias(String tipo) {
+    public List<String> categorias(String tipo) {
         return service.listarCategorias(tipo);
+    }
+    
+    @GetMapping("/categorias")
+    public List<String> divisas() {
+        return service.listarDivisa();
     }
     
     @GetMapping("/todos")
@@ -69,15 +79,15 @@ public class MovimientoControlador {
         return service.obtenerTodos();
     }
     
-    @GetMapping("/ingresos")
-    public List<Ingreso> listarIngresos() {
-        return service.obtenerIngresos();
-    }    
-    
     @GetMapping("/gastos")
-    public List<Gasto> listarGastos() {
+    public List<Movimiento> listarGastos() {
         return service.obtenerGastos();
     }
+    
+    @GetMapping("/ingresos")
+    public List<Movimiento> listarIngresos() {
+        return service.obtenerIngresos();
+    }    
 
     @GetMapping("/balance")
     public double balance() {

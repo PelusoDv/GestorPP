@@ -122,13 +122,13 @@ public class PresupuestoService {
     
     public List<Movimiento> obtenerGastos() {
         List<String> tipos = repoC.findDistinctTipos();
-        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(1));
+        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(0));
         return gastos;
     }
     
     public List<Movimiento> obtenerIngresos() {  
         List<String> tipos = repoC.findDistinctTipos();
-        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(2));
+        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(1));
         return ingresos;
     }
     

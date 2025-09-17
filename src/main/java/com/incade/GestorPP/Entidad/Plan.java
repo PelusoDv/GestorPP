@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Divisa {
+public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,6 +24,8 @@ public class Divisa {
     @Column(unique = true, nullable = false)
     private String nombre;
     @NotBlank
-    @Column(unique = true, nullable = false)
-    private String codigo;
+    @Column(name = "cant_miembros")
+    private Integer cantMimbros;
+    @NotBlank
+    private double precio;
 }

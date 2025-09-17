@@ -30,12 +30,12 @@ public class PresupuestoService {
             
             //Buscamos si existe el tipo especificado
             if (repoC.existsByTipo(dto.getTipo())){
-            //Si existe, buscamos la categoria
-                Categoria categoria = repoC.findByCategoria(dto.getCategoria())
-                    //Si no encuentra la categoria lanza una excepcion
-                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada")); 
+                //Si existe, buscamos la categorias asociada al tipo
+                Categoria categoria = repoC.findByTipoAndCategoria(dto.getTipo(),dto.getCategoria())
+                    //Si no encuentra la categoria lanza una excepcion 
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
                 //Si todo sale bien, setea el tipo y categoria
-                mov.setCategoria(categoria);
+                mov.setCategoria(categoria);                         
             // Y si no encuentra el tipo lanza una excepcion
             } else {throw new RuntimeException("Tipo no encontrado");}
             
@@ -66,8 +66,8 @@ public class PresupuestoService {
             
             //Buscamos si existe el tipo especificado
             if (repoC.existsByTipo(dto.getTipo())){
-            //Si existe, buscamos la categoria
-                Categoria categoria = repoC.findByCategoria(dto.getCategoria())
+            //Si existe, buscamos la categoria asociada al tipo
+                Categoria categoria = repoC.findByTipoAndCategoria(dto.getTipo(),dto.getCategoria())
                     //Si no encuentra la categoria lanza una excepcion
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada")); 
                 //Si todo sale bien, setea el tipo y categoria
@@ -95,12 +95,13 @@ public class PresupuestoService {
     
     public void borrar(int id) {
         if (repoM.existsById(id)){
+            repoM.deleteById(id);         
         } else {
             throw new IllegalArgumentException("El Movimiento no existe.");
         }
     }
     
-    public List<String> listarTipo() {
+    public List<String> listarTipos() {
        List<String> tipos = repoC.findDistinctTipos();
        return tipos;
    }
@@ -110,7 +111,7 @@ public class PresupuestoService {
         return categorias;
     }
     
-    public List<String> listarDivisa() {
+    public List<String> listarDivisas() {
         List<String> divisas = repoD.findDistinctNombre();
         return divisas;
     }
@@ -122,13 +123,13 @@ public class PresupuestoService {
     
     public List<Movimiento> obtenerGastos() {
         List<String> tipos = repoC.findDistinctTipos();
-        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(1));
+        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(0));
         return gastos;
     }
     
     public List<Movimiento> obtenerIngresos() {  
         List<String> tipos = repoC.findDistinctTipos();
-        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(2));
+        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(1));
         return ingresos;
     }
     

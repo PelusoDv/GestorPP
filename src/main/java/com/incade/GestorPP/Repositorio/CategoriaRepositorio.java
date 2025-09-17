@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface CategoriaRepositorio extends JpaRepository<Categoria, Integer> {
-    Optional<Categoria> findByCategoria(String categoira);
+    Optional<Categoria> findByTipoAndCategoria(String tipo, String categoria);
     List<Categoria> findByTipo(String tipo);
     @Query("SELECT DISTINCT tipo FROM Categoria")
     List<String> findDistinctTipos();

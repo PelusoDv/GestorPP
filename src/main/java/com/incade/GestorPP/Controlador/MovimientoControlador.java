@@ -59,7 +59,7 @@ public class MovimientoControlador {
 
     @GetMapping("/tipos")
     public List<String> tipos() {
-        return service.listarTipo();
+        return service.listarTipos();
     }
     
     @GetMapping("/categorias")
@@ -69,7 +69,7 @@ public class MovimientoControlador {
     
     @GetMapping("/divisas")
     public List<String> divisas() {
-        return service.listarDivisa();
+        return service.listarDivisas();
     }
     
     @GetMapping("/todos")

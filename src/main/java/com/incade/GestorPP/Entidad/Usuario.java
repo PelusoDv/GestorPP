@@ -1,6 +1,7 @@
 
 package com.incade.GestorPP.Entidad;
 
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,14 +17,19 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Divisa {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank
-    @Column(unique = true, nullable = false)
-    private String nombre;
+    @Column(name = "usuario_nombre", unique = true, nullable = false)
+    private String usuarioNombre;
+    @NotBlank
+    @Column(nullable = false)
+    private String password;
     @NotBlank
     @Column(unique = true, nullable = false)
-    private String codigo;
+    private String email;
+    @Column(nullable = false)    
+    private LocalDate fecha = LocalDate.now();
 }

@@ -53,11 +53,11 @@ public class InicioDatos implements CommandLineRunner {
         
         if (repoPla.count() == 0) {
             List<Plan> planes = Arrays.asList(
-            new Plan(null, "Free", 1, 0),
-            new Plan(null, "Premium", 1, 4000),
-            new Plan(null, "Doble", 2, 6000),
-            new Plan(null, "Familiar", 5, 8000),
-            new Plan(null, "Ejecutivo", 20, 12000)
+            new Plan(null, "Free", 1, 0.00),
+            new Plan(null, "Premium", 1, 4000.00),
+            new Plan(null, "Doble", 2, 6000.00),
+            new Plan(null, "Familiar", 5, 8000.00),
+            new Plan(null, "Ejecutivo", 20, 12000.00)
             );
         repoPla.saveAll(planes);
         }

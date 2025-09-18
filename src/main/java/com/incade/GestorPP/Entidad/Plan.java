@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,8 @@ public class Plan {
     @NotBlank
     @Column(unique = true, nullable = false)
     private String nombre;
-    @NotBlank
+    @NotNull
     @Column(name = "cant_miembros")
     private Integer cantMimbros;
-    @NotBlank
     private double precio;
 }

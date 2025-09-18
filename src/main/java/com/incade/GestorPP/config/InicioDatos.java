@@ -12,6 +12,7 @@ import com.incade.GestorPP.Repositorio.CategoriaRepositorio;
 import com.incade.GestorPP.Repositorio.DivisaRepositorio;
 import com.incade.GestorPP.Repositorio.PlanRepositorio;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -24,7 +25,7 @@ public class InicioDatos implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (repoCate.count() == 0) {
-            List<String> categoriasGasto = List.of("Otros Gastos","Ahorros","Alimentación",
+            List<String> categoriasGasto = Arrays.asList("Otros Gastos","Ahorros","Alimentación",
                                                    "Alquiler","Almacen","Cuidado Personal",
                                                    "Deudas","Ocio","Educacion",
                                                    "Inversiones","Salud","Servicio",
@@ -32,7 +33,7 @@ public class InicioDatos implements CommandLineRunner {
             categoriasGasto.forEach(categoria ->
                 repoCate.save(new Categoria(null, "Gasto", categoria))
             );
-            List<String> categoriasIngreso = List.of("Otros Ingresos", "Inversiones", "Extras",
+            List<String> categoriasIngreso = Arrays.asList("Otros Ingresos", "Inversiones", "Extras",
                                                      "Prestamos", "Reembolsos","Regalos/Donaciones",
                                                      "Salarios","Subsidios/Becas", "Ventas");
             categoriasIngreso.forEach(categoria ->
@@ -41,14 +42,11 @@ public class InicioDatos implements CommandLineRunner {
         }
         
         if (repoDiv.count() == 0) {
-            Map<String, String> divisas = Map.of(
-                    "Pesos","ARS",
-                    "Dólares","USD", 
-                    "Reales","BRL", 
-                    "Guaraníes","PYG");
-            divisas.forEach((nombre, codigo) ->
-                repoDiv.save(new Divisa(null, nombre, codigo))
-            );
+            Map<String, String> divisas = new HashMap<>();
+            divisas.put("Pesos","ARS");
+            divisas.put("Dólares","USD"); 
+            divisas.put("Reales","BRL"); 
+            divisas.put("Guaraníes","PYG");
         }
         
         if (repoPla.count() == 0) {

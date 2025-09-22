@@ -37,7 +37,7 @@ public class MovimientoControlador {
         }
     }
     
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar{id}")
     public ResponseEntity<?> actualizarMovi(@Valid @RequestBody MovimientoDTO dto, @PathVariable("id") int id) {
         try {      
             service.actualizar(dto, id);
@@ -47,7 +47,7 @@ public class MovimientoControlador {
         }          
     }    
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/borrar{id}")
     public ResponseEntity<?> borrarMovi(@PathVariable("id") int id){
         try {
             service.borrar(id);

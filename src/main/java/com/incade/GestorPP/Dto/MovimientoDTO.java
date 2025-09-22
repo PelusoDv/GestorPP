@@ -13,4 +13,8 @@ public class MovimientoDTO {
     private String tipo;
     private String categoria;
     private String divisa;
+    private String usuario;
+    private String grupo;
+    private String emisor;
+    private String email;
 }

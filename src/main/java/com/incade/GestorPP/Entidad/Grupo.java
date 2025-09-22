@@ -2,13 +2,15 @@
 package com.incade.GestorPP.Entidad;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,11 +29,7 @@ public class Grupo {
     @Column(unique = true, nullable = false)
     private String nombre;
     @Column(nullable = false)
-    private LocalDate fecha = LocalDate.now();
-    @ManyToOne (optional = false)
-    @JoinColumn (name = "usuario_id")
-    private Usuario usuario;
-    @ManyToOne (optional = false)
-    @JoinColumn (name = "suscripcion_id")
-    private Suscripcion suscripcion;
+    private LocalDate fechaCreacion = LocalDate.now();
+    @OneToMany(mappedBy = "grupo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Suscripcion> Suscripcion = new HashSet<>();
 }

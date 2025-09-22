@@ -25,6 +25,7 @@ public class PresupuestoService {
    
     public Movimiento registrar(MovimientoDTO dto) {
 
+        // Verificamos que el monto sea distinto a 0
         if (dto.getMonto() != 0 ) {          
             Movimiento mov = new Movimiento();
             

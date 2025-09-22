@@ -25,10 +25,6 @@ public class Movimiento {
     private double monto;
     private String descripcion;
     private LocalDate fecha;
-    @Column(name = "sender_name")
-    private String nombreEmisor;
-    @Column(name = "sender_email")
-    private String emailEmisor;
     @ManyToOne(optional = false)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
@@ -41,5 +37,8 @@ public class Movimiento {
     @ManyToOne (optional = false)
     @JoinColumn (name = "grupo_id")
     private Grupo grupo;
-    
+    @Column(name = "sender_name")
+    private String nombreEmisor;
+    @Column(name = "sender_email")
+    private String emailEmisor;
 }

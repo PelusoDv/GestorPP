@@ -15,12 +15,10 @@ public class SecurityConfig {
             .cors() // usa WebConfig.java
             .and()
             .authorizeHttpRequests()
-                .antMatchers("/movimientos/**", "/usuario/**").permitAll() // permite libre acceso
+                .antMatchers("/**").permitAll() // permite libre acceso
                 .anyRequest().authenticated() // protege el resto
             .and()
-            .formLogin() // deja habilitado login por formulario
-            .and()
-            .logout();
+            .httpBasic();
 
         return http.build();
     }

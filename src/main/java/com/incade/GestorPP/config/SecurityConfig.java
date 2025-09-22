@@ -18,8 +18,8 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests()
                 .anyRequest().permitAll() // permite libre acceso
-            .and()
-            .httpBasic();
+            .and();
+            //.httpBasic();
 
         return http.build();
     }

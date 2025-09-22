@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GrupoRepositorio extends JpaRepository<Grupo, Integer>{
     Optional<Grupo> findByNombre(String nombre);
-    boolean existByNombre(String nombre);
+    boolean existsByNombre(String nombre);
 }

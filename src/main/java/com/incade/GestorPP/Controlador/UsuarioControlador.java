@@ -34,7 +34,7 @@ public class UsuarioControlador {
     }
     
     @DeleteMapping("/borrar")
-    public ResponseEntity<?> borrarMovi(@RequestParam String usuario, @RequestParam String password){
+    public ResponseEntity<?> borrarUser(@RequestParam String usuario, @RequestParam String password){
         try {
             service.borrar(usuario, password);
             return new ResponseEntity(new String("Usuario eliminado"), HttpStatus.OK);

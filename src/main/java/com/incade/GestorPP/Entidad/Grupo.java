@@ -26,7 +26,7 @@ public class Grupo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
     private LocalDate fechaCreacion = LocalDate.now();

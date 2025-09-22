@@ -56,12 +56,9 @@ public class InicioDatos implements CommandLineRunner {
         }
         
         if (repoGru.count() == 0) {
-            List<String> grupos = Arrays.asList( "Global", "Premiums");            
-            grupos.forEach(nombre -> { 
                 Grupo grupo = new Grupo();
-                grupo.setNombre(nombre); 
+                grupo.setNombre("Global"); 
                 repoGru.save(grupo);
-            });
         }
         
         if (repoPla.count() == 0) {

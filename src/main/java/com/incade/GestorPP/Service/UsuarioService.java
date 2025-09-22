@@ -4,7 +4,6 @@ package com.incade.GestorPP.Service;
 import com.incade.GestorPP.Dto.UsuarioDTO;
 import com.incade.GestorPP.Entidad.Usuario;
 import com.incade.GestorPP.Repositorio.UsuarioRepositorio;
-import java.time.LocalDate;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,13 +52,15 @@ public class UsuarioService {
         newUser.setUsuarioNombre(dto.getUsuarioNombre());
         newUser.setNombreCompleto(dto.getNombreCompleto());
         newUser.setPassword(passCode.encode(dto.getPassword())); //Se encripta la contraseña
-        newUser.setEmail(dto.getEmail());        
+        newUser.setEmail(dto.getEmail());  
+        
+        Usuario savedUser = repoU.save(newUser);
         
         // Registramos la suscripcion elegida por el usuario
-        susService.registrarSus(newUser, dto.getPlan(), dto.getFin(), dto.getGrupo());
+        susService.registrarSus(savedUser, dto.getPlan(), dto.getFin(), dto.getGrupo());
         
         // Guardamos el usuario
-        return repoU.save(newUser);
+        return savedUser;
     }
     
     public void borrar(String nombre, String password) {

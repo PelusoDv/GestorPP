@@ -37,7 +37,5 @@ public class Suscripcion {
     private LocalDate fin;
     @ManyToOne(optional = false)
     @JoinColumn(name = "plan_id")
-    private Plan plan;
-        
-    
+    private Plan plan;  
 }

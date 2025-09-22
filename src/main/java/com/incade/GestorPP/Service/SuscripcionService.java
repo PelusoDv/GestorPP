@@ -5,6 +5,7 @@ import com.incade.GestorPP.Entidad.Grupo;
 import com.incade.GestorPP.Entidad.Plan;
 import com.incade.GestorPP.Entidad.Suscripcion;
 import com.incade.GestorPP.Entidad.Usuario;
+import com.incade.GestorPP.Entidad.UsuarioGrupoId;
 import com.incade.GestorPP.Repositorio.GrupoRepositorio;
 import com.incade.GestorPP.Repositorio.PlanRepositorio;
 import com.incade.GestorPP.Repositorio.SuscripcionRepositorio;
@@ -26,7 +27,7 @@ public class SuscripcionService {
     
     public Suscripcion registrarSus(Usuario user, String plan, LocalDate finale, String grup) {
         Suscripcion sus = new Suscripcion();
-        Grupo grupo = new Grupo();
+        Grupo grupoAsignado;
         List<Plan> planes = repoP.findAll();
         List<Grupo> grupos = repoG.findAll();
         
@@ -34,37 +35,34 @@ public class SuscripcionService {
         Plan planSus = repoP.findByNombre(plan);
         
         // Verificamos si es el gratuito
-        if (plan == planes.get(0).getNombre()) {         
-            sus.setPlan(planSus);   
-            sus.setGrupo(grupos.get(0));
+        if (planes.get(0).getNombre().equals(plan)) {          
+            grupoAsignado = grupos.get(0);
             sus.setRol("Miembro");
             
         // Verificamos si es el premium
-        } else if (plan == planes.get(1).getNombre()) {
-            sus.setPlan(planSus);
-            sus.setGrupo(grupos.get(1));
+        } else if (planes.get(1).getNombre().equals(plan)) {
+            grupoAsignado = grupos.get(1);
             sus.setRol("Miembro");
             sus.setFin(finale); // Si no es gratuito se pone una fecha limite a la suscripcion
             
         // Y si no es ninguno, creamos un nuevo grupo
         } else {
-            grupo.setNombre(grup);
-            repoG.save(grupo);
-            sus.setPlan(planSus);
-            sus.setGrupo(repoG.findByNombre(grup).get());
+            Grupo nuevoGrupo = new Grupo();
+            nuevoGrupo.setNombre(grup);
+            grupoAsignado = repoG.save(nuevoGrupo);
             sus.setRol("Dueño");
             sus.setFin(finale); // Si no es  se pone una fecha limite a la suscripcion
         }
         
-        // Creamos la relacion
-        sus.setUsuario(user);
-        sus.setGrupo(grupo);
+        // Now, create and set the composite key
+        UsuarioGrupoId id = new UsuarioGrupoId(user.getId(), grupoAsignado.getId());
+        sus.setId(id);
         
-        // Añadimos la asociacion
-        user.getSuscripcion().add(sus);
-        grupo.getSuscripcion().add(sus);
+        // Creamos la relacion
+        sus.setPlan(planSus);
+        sus.setUsuario(user);
+        sus.setGrupo(grupoAsignado);
         
         return repoS.save(sus);
-    }
-    
+    }  
 }

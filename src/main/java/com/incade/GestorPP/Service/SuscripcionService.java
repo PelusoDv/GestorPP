@@ -41,7 +41,7 @@ public class SuscripcionService {
             
         // Verificamos si es el premium
         } else if (planes.get(1).getNombre().equals(plan)) {
-            grupoAsignado = grupos.get(1);
+            grupoAsignado = grupos.get(0);
             sus.setRol("Miembro");
             sus.setFin(finale); // Si no es gratuito se pone una fecha limite a la suscripcion
             

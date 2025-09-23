@@ -35,17 +35,17 @@ Version 2.1.0
 ► Con un USUARIO y GRUPO creados se pueden generar movimientos como las versiones anteriores con
 el nuevo formato del MovimientoDTO. Ej de JSON:
 	{
-	  "monto": 65000.00;
-    	  "descripcion": "cuota facu";
-    	  "fecha": "2025-09-05";
-    	  "tipo": "Gasto";
-   	  "categoria": "Educacion";
-  	  "divisa": "Pesos";
-   	  "usuario": "pepe";
-   	  "grupo": "Global";
+	  "monto": 65000.00,
+    	  "descripcion": "cuota facu",
+    	  "fecha": "2025-09-05",
+    	  "tipo": "Gasto",
+   	  "categoria": "Educacion",
+  	  "divisa": "Pesos",
+   	  "usuario": "pepe",
+   	  "grupo": "Global",
 		// Campos optativos por si el movimiento es generado via email para almacenar el nombre y correo del emisor
-  	  "emisor": null; 
-  	  "email": null; 
+  	  "emisor": null,
+  	  "email": null
 	}
 
 

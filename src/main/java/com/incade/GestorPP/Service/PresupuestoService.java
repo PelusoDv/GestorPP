@@ -7,7 +7,9 @@ import com.incade.GestorPP.Entidad.Divisa;
 import com.incade.GestorPP.Entidad.Movimiento;
 import com.incade.GestorPP.Repositorio.CategoriaRepositorio;
 import com.incade.GestorPP.Repositorio.DivisaRepositorio;
+import com.incade.GestorPP.Repositorio.GrupoRepositorio;
 import com.incade.GestorPP.Repositorio.MovimientoRepositorio;
+import com.incade.GestorPP.Repositorio.UsuarioRepositorio;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,10 @@ public class PresupuestoService {
     CategoriaRepositorio repoC;
     @Autowired
     DivisaRepositorio repoD;
+    @Autowired
+    UsuarioRepositorio repoU;
+    @Autowired
+    GrupoRepositorio repoG;
    
     public Movimiento registrar(MovimientoDTO dto) {
 
@@ -50,6 +56,8 @@ public class PresupuestoService {
             mov.setMonto(dto.getMonto());
             mov.setDescripcion(dto.getDescripcion());
             mov.setFecha(dto.getFecha());
+            mov.setUsuario(repoU.findByUsuarioNombre(dto.getUsuario()).get());
+            mov.setGrupo(repoG.findByNombre(dto.getGrupo()).get());
             
             // Guarda el movimiento
             return repoM.save(mov);
@@ -86,6 +94,8 @@ public class PresupuestoService {
             mov.setMonto(dto.getMonto());
             mov.setDescripcion(dto.getDescripcion());
             mov.setFecha(dto.getFecha());
+            mov.setUsuario(repoU.findByUsuarioNombre(dto.getUsuario()).get());
+            mov.setGrupo(repoG.findByNombre(dto.getGrupo()).get());
             
             // Guarda el movimiento
             return repoM.save(mov);

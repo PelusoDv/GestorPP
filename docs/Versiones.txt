@@ -26,7 +26,7 @@ Version 2.1.0
   	  "password": "123456",
  	  "email": "pepe@mail.com",
   	  "plan": "Premium",
-  	  "fin": "2025-12-31", ---> este dato puede ser null para las suscripciones gratuitas
+  	  "fin": "2025-12-31", // este dato puede ser null para las suscripciones gratuitas
   	  "grupo": "Global"
 	}
 ► Para borrar un usuario, se solicita el el nombre de usuario y contraseña como parametro de URL:

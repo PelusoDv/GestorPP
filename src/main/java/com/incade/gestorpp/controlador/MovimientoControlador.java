@@ -74,17 +74,17 @@ public class MovimientoControlador {
     }
     
     @GetMapping("/todos")
-    public List<Movimiento> listarTodo() {
+    public List<MovimientoDTO> listarTodo() {
         return service.obtenerTodos();
     }
     
     @GetMapping("/gastos")
-    public List<Movimiento> listarGastos() {
+    public List<MovimientoDTO> listarGastos() {
         return service.obtenerGastos();
     }
     
     @GetMapping("/ingresos")
-    public List<Movimiento> listarIngresos() {
+    public List<MovimientoDTO> listarIngresos() {
         return service.obtenerIngresos();
     }    
 

@@ -10,6 +10,7 @@ import com.incade.gestorpp.repositorio.DivisaRepositorio;
 import com.incade.gestorpp.repositorio.GrupoRepositorio;
 import com.incade.gestorpp.repositorio.MovimientoRepositorio;
 import com.incade.gestorpp.repositorio.UsuarioRepositorio;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,32 +127,56 @@ public class PresupuestoService {
         List<String> divisas = repoD.findDistinctNombre();
         return divisas;
     }
-      
-    public List<Movimiento> obtenerTodos() {
-        List<Movimiento> movimientos = repoM.findAll();
-        return movimientos;
+     
+    private MovimientoDTO convertirDTO(Movimiento movimiento) {
+        MovimientoDTO dto = new MovimientoDTO();
+        dto.setMonto(movimiento.getMonto());
+        dto.setDescripcion(movimiento.getDescripcion());
+        dto.setFecha(movimiento.getFecha());
+        dto.setCategoria(movimiento.getCategoria().getCategoria());
+        dto.setDivisa(movimiento.getDivisa().getNombre());
+        dto.setUsuario(movimiento.getUsuario().getUsuarioNombre());
+        dto.setGrupo(movimiento.getGrupo().getNombre());
+        return dto;
     }
     
-    public List<Movimiento> obtenerGastos() {
+    public List<MovimientoDTO> obtenerTodos() {
+        List<Movimiento> movimientos = repoM.findAll();
+        List<MovimientoDTO> movimientosDTO = new ArrayList<>();
+        movimientos.forEach( movimiento ->
+                movimientosDTO.add(convertirDTO(movimiento))
+        );
+        return movimientosDTO;
+    }
+    
+    public List<MovimientoDTO> obtenerGastos() {
         List<String> tipos = repoC.findDistinctTipos();
         List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(0));
-        return gastos;
+        List<MovimientoDTO> gastosDTO = new ArrayList<>();
+        gastos.forEach( movimiento ->
+                gastosDTO.add(convertirDTO(movimiento))
+        );
+        return gastosDTO;
     }
     
-    public List<Movimiento> obtenerIngresos() {  
+    public List<MovimientoDTO> obtenerIngresos() {  
         List<String> tipos = repoC.findDistinctTipos();
         List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(1));
-        return ingresos;
+        List<MovimientoDTO> ingresosDTO = new ArrayList<>();
+        ingresos.forEach( movimiento ->
+                ingresosDTO.add(convertirDTO(movimiento))
+        );
+        return ingresosDTO;
     }
     
     public double calcularBalance() { 
 
         double totalGastos = obtenerGastos() //Trae todos los Gastos
                 .stream() //Pasa la info a un stream
-                .mapToDouble(Movimiento::getMonto).sum(); //Mapea los montos en tipo double y los suma
+                .mapToDouble(MovimientoDTO::getMonto).sum(); //Mapea los montos en tipo double y los suma
         double totalIngresos = obtenerIngresos() //Trae todos los Ingresos
                 .stream() //Pasa la info a un stream
-                .mapToDouble(Movimiento::getMonto).sum(); //Mapea los montos en tipo double y los suma 
+                .mapToDouble(MovimientoDTO::getMonto).sum(); //Mapea los montos en tipo double y los suma 
         return totalIngresos - totalGastos;
     }
 }

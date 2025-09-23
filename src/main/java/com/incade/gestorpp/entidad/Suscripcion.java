@@ -1,6 +1,7 @@
 
 package com.incade.gestorpp.entidad;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -24,11 +25,13 @@ public class Suscripcion {
     @ManyToOne
     @MapsId("usuarioId") // enlaza la parte usuarioId de la PK
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Usuario usuario;
 
     @ManyToOne
     @MapsId("grupoId") // enlaza la parte grupoId de la PK
     @JoinColumn(name = "grupo_id")
+    @JsonBackReference
     private Grupo grupo;
     
     @Column(nullable = false)

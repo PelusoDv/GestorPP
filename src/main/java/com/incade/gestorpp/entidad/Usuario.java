@@ -1,6 +1,7 @@
 
 package com.incade.gestorpp.entidad;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,5 +41,6 @@ public class Usuario {
     @Column(nullable = false)    
     private LocalDate fecha = LocalDate.now();
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Suscripcion> Suscripcion = new HashSet<>();
 }

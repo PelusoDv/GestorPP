@@ -2,7 +2,6 @@
 package com.incade.gestorpp.controlador;
 
 import com.incade.gestorpp.dto.MovimientoDTO;
-import com.incade.gestorpp.entidad.Movimiento;
 import com.incade.gestorpp.service.PresupuestoService;
 import java.util.List;
 import javax.validation.Valid;

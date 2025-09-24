@@ -43,7 +43,9 @@ public class PresupuestoService {
                     //Si no encuentra la categoria lanza una excepcion 
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
                 //Si todo sale bien, setea el tipo y categoria
-                mov.setCategoria(categoria);                         
+                categoria.setTipo(dto.getTipo());
+                categoria.setCategoria(dto.getCategoria());
+                mov.setCategoria(categoria);  
             // Y si no encuentra el tipo lanza una excepcion
             } else {throw new RuntimeException("Tipo no encontrado");}
             
@@ -59,6 +61,8 @@ public class PresupuestoService {
             mov.setFecha(dto.getFecha());
             mov.setUsuario(repoU.findByUsuarioNombre(dto.getUsuario()).get());
             mov.setGrupo(repoG.findByNombre(dto.getGrupo()).get());
+            mov.setNombreEmisor(dto.getEmisor());
+            mov.setEmailEmisor(dto.getEmail());
             
             // Guarda el movimiento
             return repoM.save(mov);
@@ -81,6 +85,8 @@ public class PresupuestoService {
                     //Si no encuentra la categoria lanza una excepcion
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada")); 
                 //Si todo sale bien, setea el tipo y categoria
+                categoria.setTipo(dto.getTipo());
+                categoria.setCategoria(dto.getCategoria());
                 mov.setCategoria(categoria);
             // Y si no encuentra el tipo lanza una excepcion
             } else {throw new RuntimeException("Tipo no encontrado");}
@@ -97,6 +103,8 @@ public class PresupuestoService {
             mov.setFecha(dto.getFecha());
             mov.setUsuario(repoU.findByUsuarioNombre(dto.getUsuario()).get());
             mov.setGrupo(repoG.findByNombre(dto.getGrupo()).get());
+            mov.setNombreEmisor(dto.getEmisor());
+            mov.setEmailEmisor(dto.getEmail());
             
             // Guarda el movimiento
             return repoM.save(mov);

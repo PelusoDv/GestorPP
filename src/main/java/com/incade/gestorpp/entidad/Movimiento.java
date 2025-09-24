@@ -38,7 +38,7 @@ public class Movimiento {
     @JoinColumn (name = "grupo_id")
     private Grupo grupo;
     @Column(name = "sender_name")
-    private String nombreEmisor;
+    private String emisor;
     @Column(name = "sender_email")
-    private String emailEmisor;
+    private String email;
 }

@@ -59,8 +59,8 @@ public class PresupuestoService {
             mov.setFecha(dto.getFecha());
             mov.setUsuario(repoU.findByUsuarioNombre(dto.getUsuario()).get());
             mov.setGrupo(repoG.findByNombre(dto.getGrupo()).get());
-            mov.setNombreEmisor(dto.getEmisor());
-            mov.setEmailEmisor(dto.getEmail());
+            mov.setEmisor(dto.getEmisor());
+            mov.setEmail(dto.getEmail());
             
             // Guarda el movimiento
             return repoM.save(mov);
@@ -99,8 +99,8 @@ public class PresupuestoService {
             mov.setFecha(dto.getFecha());
             mov.setUsuario(repoU.findByUsuarioNombre(dto.getUsuario()).get());
             mov.setGrupo(repoG.findByNombre(dto.getGrupo()).get());
-            mov.setNombreEmisor(dto.getEmisor());
-            mov.setEmailEmisor(dto.getEmail());
+            mov.setEmisor(dto.getEmisor());
+            mov.setEmail(dto.getEmail());
             
             // Guarda el movimiento
             return repoM.save(mov);
@@ -142,6 +142,8 @@ public class PresupuestoService {
         dto.setDivisa(movimiento.getDivisa().getNombre());
         dto.setUsuario(movimiento.getUsuario().getUsuarioNombre());
         dto.setGrupo(movimiento.getGrupo().getNombre());
+        dto.setEmisor(movimiento.getEmisor());
+        dto.setEmail(movimiento.getEmail());
         return dto;
     }
     

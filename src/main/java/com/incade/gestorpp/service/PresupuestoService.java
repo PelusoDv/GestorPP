@@ -43,8 +43,6 @@ public class PresupuestoService {
                     //Si no encuentra la categoria lanza una excepcion 
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
                 //Si todo sale bien, setea el tipo y categoria
-                categoria.setTipo(dto.getTipo());
-                categoria.setCategoria(dto.getCategoria());
                 mov.setCategoria(categoria);  
             // Y si no encuentra el tipo lanza una excepcion
             } else {throw new RuntimeException("Tipo no encontrado");}
@@ -85,8 +83,6 @@ public class PresupuestoService {
                     //Si no encuentra la categoria lanza una excepcion
                     .orElseThrow(() -> new RuntimeException("Categoría no encontrada")); 
                 //Si todo sale bien, setea el tipo y categoria
-                categoria.setTipo(dto.getTipo());
-                categoria.setCategoria(dto.getCategoria());
                 mov.setCategoria(categoria);
             // Y si no encuentra el tipo lanza una excepcion
             } else {throw new RuntimeException("Tipo no encontrado");}
@@ -141,6 +137,7 @@ public class PresupuestoService {
         dto.setMonto(movimiento.getMonto());
         dto.setDescripcion(movimiento.getDescripcion());
         dto.setFecha(movimiento.getFecha());
+        dto.setTipo(movimiento.getCategoria().getTipo());
         dto.setCategoria(movimiento.getCategoria().getCategoria());
         dto.setDivisa(movimiento.getDivisa().getNombre());
         dto.setUsuario(movimiento.getUsuario().getUsuarioNombre());

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class MovimientoDTO {
+    private int id;
     private double monto;
     private String descripcion;
     private LocalDate fecha;

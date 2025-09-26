@@ -1,3 +1,12 @@
+Version 2.2.0
+► Movimientos ahora devuelve tambien el id
+► Los Movimientos ahora son filtrados por usuario:
+	■ Solo hay que añadir el nombre de usuario a la URL:
+	EJ: /movimientos/todos/Hugo
+► Ahora se pueden ordenar los Movimientos segun el criterio enviado en la URL:
+	EJ: /movimientos/todos/Hugo?orderby=categoria
+	(si no se envia un criterio de orden, por defecto devuelve segun el orden de ids)
+
 Version 2.1.0
 
 ► En esta version se modifico completamente la base de datos (ver el DER en el archivo FinTrackDB.png).

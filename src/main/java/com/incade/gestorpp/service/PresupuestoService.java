@@ -13,7 +13,9 @@ import com.incade.gestorpp.repositorio.UsuarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -70,10 +72,10 @@ public class PresupuestoService {
         }
     }  
     
-    public Movimiento actualizar(MovimientoDTO dto, int id) {
+    public Movimiento actualizar(MovimientoDTO dto) {
         
         if (dto.getMonto() != 0) {
-            Movimiento mov = repoM.findById(id)
+            Movimiento mov = repoM.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("Ingreso no encontrado"));
             
             //Buscamos si existe el tipo especificado
@@ -134,6 +136,7 @@ public class PresupuestoService {
      
     private MovimientoDTO convertirDTO(Movimiento movimiento) {
         MovimientoDTO dto = new MovimientoDTO();
+        dto.setId(movimiento.getId());
         dto.setMonto(movimiento.getMonto());
         dto.setDescripcion(movimiento.getDescripcion());
         dto.setFecha(movimiento.getFecha());
@@ -147,41 +150,67 @@ public class PresupuestoService {
         return dto;
     }
     
-    public List<MovimientoDTO> obtenerTodos() {
-        List<Movimiento> movimientos = repoM.findAll();
+    public List<MovimientoDTO> obtenerTodos(String usuario, String orderby) {
+        List<Movimiento> movimientos;
+        if (!StringUtils.isBlank(orderby)) {
+            Sort sort = Sort.by(orderby).descending();
+            movimientos = repoM.findAll(sort);
+        } else {
+            movimientos = repoM.findAll();
+        }
         List<MovimientoDTO> movimientosDTO = new ArrayList<>();
-        movimientos.forEach( movimiento ->
-                movimientosDTO.add(convertirDTO(movimiento))
-        );
+        movimientos.forEach( movimiento -> {
+            if (usuario.equals(movimiento.getUsuario().getUsuarioNombre())) {
+                movimientosDTO.add(convertirDTO(movimiento));
+            };
+        });
         return movimientosDTO;
     }
     
-    public List<MovimientoDTO> obtenerGastos() {
+    public List<MovimientoDTO> obtenerGastos(String usuario, String orderby) {
         List<String> tipos = repoC.findDistinctTipos();
-        List<Movimiento> gastos = repoM.findByCategoria_Tipo(tipos.get(0));
+        List<Movimiento> gastos;
+        if (!StringUtils.isBlank(orderby)) {
+            Sort sort = Sort.by(orderby).descending();
+            gastos = repoM.findByCategoria_Tipo(tipos.get(0), sort);;
+        } else {
+            Sort sort = Sort.unsorted();
+            gastos = repoM.findByCategoria_Tipo(tipos.get(0), sort);;
+        }
         List<MovimientoDTO> gastosDTO = new ArrayList<>();
-        gastos.forEach( movimiento ->
-                gastosDTO.add(convertirDTO(movimiento))
-        );
+        gastos.forEach( movimiento -> {
+            if (usuario.equals(movimiento.getUsuario().getUsuarioNombre())) {
+                gastosDTO.add(convertirDTO(movimiento));
+            };
+        });
         return gastosDTO;
     }
     
-    public List<MovimientoDTO> obtenerIngresos() {  
+    public List<MovimientoDTO> obtenerIngresos(String usuario, String orderby) {  
         List<String> tipos = repoC.findDistinctTipos();
-        List<Movimiento> ingresos = repoM.findByCategoria_Tipo(tipos.get(1));
+        List<Movimiento> ingresos;
+        if (!StringUtils.isBlank(orderby)) {
+            Sort sort = Sort.by(orderby).descending();
+            ingresos = repoM.findByCategoria_Tipo(tipos.get(1), sort);;
+        } else {
+            Sort sort = Sort.unsorted();
+            ingresos = repoM.findByCategoria_Tipo(tipos.get(1), sort);;
+        }
         List<MovimientoDTO> ingresosDTO = new ArrayList<>();
-        ingresos.forEach( movimiento ->
-                ingresosDTO.add(convertirDTO(movimiento))
-        );
+        ingresos.forEach( movimiento -> {
+            if (usuario.equals(movimiento.getUsuario().getUsuarioNombre())) {
+                ingresosDTO.add(convertirDTO(movimiento));
+            };
+        });
         return ingresosDTO;
     }
     
-    public double calcularBalance() { 
+    public double calcularBalance(String usuario, String sortInecesario) { 
 
-        double totalGastos = obtenerGastos() //Trae todos los Gastos
+        double totalGastos = obtenerGastos(usuario, sortInecesario) //Trae todos los Gastos
                 .stream() //Pasa la info a un stream
                 .mapToDouble(MovimientoDTO::getMonto).sum(); //Mapea los montos en tipo double y los suma
-        double totalIngresos = obtenerIngresos() //Trae todos los Ingresos
+        double totalIngresos = obtenerIngresos(usuario, sortInecesario) //Trae todos los Ingresos
                 .stream() //Pasa la info a un stream
                 .mapToDouble(MovimientoDTO::getMonto).sum(); //Mapea los montos en tipo double y los suma 
         return totalIngresos - totalGastos;

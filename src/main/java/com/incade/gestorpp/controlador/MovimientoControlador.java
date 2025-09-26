@@ -38,19 +38,19 @@ public class MovimientoControlador {
     }
     
     @PutMapping("/actualizar{id}")
-    public ResponseEntity<?> actualizarMovi(@Valid @RequestBody MovimientoDTO dto, @PathVariable("id") int id) {
+    public ResponseEntity<?> actualizarMovi(@Valid @RequestBody MovimientoDTO dto) {
         try {      
-            service.actualizar(dto, id);
+            service.actualizar(dto);
             return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }          
     }    
     
-    @DeleteMapping("/borrar{id}")
-    public ResponseEntity<?> borrarMovi(@PathVariable("id") int id){
+    @DeleteMapping("/borrar")
+    public ResponseEntity<?> borrarMovi(@Valid @RequestBody MovimientoDTO dto){
         try {
-            service.borrar(id);
+            service.borrar(dto.getId());
             return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -72,23 +72,23 @@ public class MovimientoControlador {
         return service.listarDivisas();
     }
     
-    @GetMapping("/todos")
-    public List<MovimientoDTO> listarTodo() {
-        return service.obtenerTodos();
+    @GetMapping("/todos/{usuario}")
+    public List<MovimientoDTO> listarTodo(@PathVariable String usuario, @RequestParam(defaultValue = "") String orderby) {
+        return service.obtenerTodos(usuario, orderby);
     }
     
-    @GetMapping("/gastos")
-    public List<MovimientoDTO> listarGastos() {
-        return service.obtenerGastos();
+    @GetMapping("/gastos/{usuario}")
+    public List<MovimientoDTO> listarGastos(@PathVariable String usuario, @RequestParam(defaultValue = "") String orderby) {
+        return service.obtenerGastos(usuario, orderby);
     }
     
-    @GetMapping("/ingresos")
-    public List<MovimientoDTO> listarIngresos() {
-        return service.obtenerIngresos();
+    @GetMapping("/ingresos/{usuario}")
+    public List<MovimientoDTO> listarIngresos(@PathVariable String usuario, @RequestParam(defaultValue = "") String orderby) {
+        return service.obtenerIngresos(usuario, orderby);
     }    
 
-    @GetMapping("/balance")
-    public double balance() {
-        return service.calcularBalance();
+    @GetMapping("/balance/{usuario}")
+    public double balance(@PathVariable String usuario) {
+        return service.calcularBalance(usuario, "");
     }
 }

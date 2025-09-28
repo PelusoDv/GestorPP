@@ -37,7 +37,7 @@ public class MovimientoControlador {
         }
     }
     
-    @PutMapping("/actualizar{id}")
+    @PutMapping("/actualizar")
     public ResponseEntity<?> actualizarMovi(@Valid @RequestBody MovimientoDTO dto) {
         try {      
             service.actualizar(dto);

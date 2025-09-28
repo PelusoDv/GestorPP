@@ -33,5 +33,5 @@ public class Grupo {
     private LocalDate fechaCreacion = LocalDate.now();
     @OneToMany(mappedBy = "grupo", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<Suscripcion> Suscripcion = new HashSet<>();
+    private Set<Suscripcion> suscripcion = new HashSet<>();
 }

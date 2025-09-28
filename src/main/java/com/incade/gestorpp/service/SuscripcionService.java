@@ -10,7 +10,10 @@ import com.incade.gestorpp.repositorio.GrupoRepositorio;
 import com.incade.gestorpp.repositorio.PlanRepositorio;
 import com.incade.gestorpp.repositorio.SuscripcionRepositorio;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,4 +68,22 @@ public class SuscripcionService {
         
         return repoS.save(sus);
     }  
+    
+    public List<Grupo> buscarGrupos(int id) {
+        List<Grupo> grupos = new ArrayList<>();
+        List<Suscripcion> suscripciones = repoS.findByUsuario_Id(id);
+        suscripciones.forEach(suscripcion -> {
+            if (suscripcion.getGrupo().getNombre().equals("Global")) {
+                Set<Suscripcion> sus = new HashSet<>();
+                UsuarioGrupoId ids = new UsuarioGrupoId(id, 1);
+                sus.add(repoS.findById(ids).get());
+                suscripcion.getGrupo().getSuscripcion().clear();
+                suscripcion.getGrupo().getSuscripcion().addAll(sus);
+                grupos.add(suscripcion.getGrupo());
+            } else {
+               grupos.add(suscripcion.getGrupo()); 
+            }
+        });
+        return grupos;
+    }
 }

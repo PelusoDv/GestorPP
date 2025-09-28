@@ -2,8 +2,10 @@
 package com.incade.gestorpp.service;
 
 import com.incade.gestorpp.dto.UsuarioDTO;
+import com.incade.gestorpp.entidad.Grupo;
 import com.incade.gestorpp.entidad.Usuario;
 import com.incade.gestorpp.repositorio.UsuarioRepositorio;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,7 +31,7 @@ public class UsuarioService {
         if (passCode.matches(password, user.getPassword())) {
             return user; // ✅ Login correcto
         } else {
-            throw new RuntimeException("Contraseña incorrecta");
+            throw new RuntimeException("Usuario o Contraseña incorrecta");
         }
     }
     
@@ -67,6 +69,14 @@ public class UsuarioService {
         // Primero confirmamos usuario y contraseña
         Usuario user = this.login(nombre, password);
         repoU.deleteById(user.getId());   
+    }
+    
+    public List<Grupo> gruposUsuario(String usuario) {
+        Usuario user = repoU.findByUsuarioNombre(usuario)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+       List<Grupo> grupos = susService.buscarGrupos(user.getId());
+       return grupos;
     }
     
 }

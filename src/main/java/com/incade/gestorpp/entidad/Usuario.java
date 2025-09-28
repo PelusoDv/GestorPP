@@ -42,5 +42,5 @@ public class Usuario {
     private LocalDate fecha = LocalDate.now();
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<Suscripcion> Suscripcion = new HashSet<>();
+    private Set<Suscripcion> suscripcion = new HashSet<>();
 }

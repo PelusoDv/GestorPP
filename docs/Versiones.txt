@@ -1,3 +1,8 @@
+Version 2.2.1
+► Añadido un metodo para ver los grupos en los que el usuario forma parte:
+	EJ: GET /usuario/(nombreUsuario)/grupos 
+► Algunos pequeños arreglos en ciertas partes del codigo
+
 Version 2.2.0
 ► Movimientos ahora devuelve tambien el id
 ► Los Movimientos ahora son filtrados por usuario:

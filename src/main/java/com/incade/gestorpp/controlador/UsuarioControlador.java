@@ -4,9 +4,8 @@ package com.incade.gestorpp.controlador;
 import com.incade.gestorpp.dto.UsuarioDTO;
 import com.incade.gestorpp.entidad.Grupo;
 import com.incade.gestorpp.service.UsuarioService;
-import java.util.Arrays;
 import java.util.List;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +41,7 @@ public class UsuarioControlador {
     public ResponseEntity<?> borrarUser(@RequestParam String usuario, @RequestParam String password){
         try {
             service.borrar(usuario, password);
-            return new ResponseEntity(new String("Usuario eliminado"), HttpStatus.OK);
+            return new ResponseEntity("Usuario eliminado", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         } 

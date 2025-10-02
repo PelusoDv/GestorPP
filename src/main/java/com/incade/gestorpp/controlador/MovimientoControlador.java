@@ -4,7 +4,7 @@ package com.incade.gestorpp.controlador;
 import com.incade.gestorpp.dto.MovimientoDTO;
 import com.incade.gestorpp.service.PresupuestoService;
 import java.util.List;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +41,7 @@ public class MovimientoControlador {
     public ResponseEntity<?> actualizarMovi(@Valid @RequestBody MovimientoDTO dto) {
         try {      
             service.actualizar(dto);
-            return new ResponseEntity(new String("Movimiento actualizado"), HttpStatus.OK);
+            return new ResponseEntity("Movimiento actualizado", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }          
@@ -51,7 +51,7 @@ public class MovimientoControlador {
     public ResponseEntity<?> borrarMovi(@Valid @RequestBody MovimientoDTO dto){
         try {
             service.borrar(dto.getId());
-            return new ResponseEntity(new String("Movimiento borrado"), HttpStatus.OK);
+            return new ResponseEntity("Movimiento borrado", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         } 

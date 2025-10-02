@@ -12,7 +12,7 @@ import com.incade.gestorpp.repositorio.MovimientoRepositorio;
 import com.incade.gestorpp.repositorio.UsuarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

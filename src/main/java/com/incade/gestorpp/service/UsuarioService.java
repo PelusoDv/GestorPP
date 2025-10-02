@@ -6,7 +6,7 @@ import com.incade.gestorpp.entidad.Grupo;
 import com.incade.gestorpp.entidad.Usuario;
 import com.incade.gestorpp.repositorio.UsuarioRepositorio;
 import java.util.List;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
